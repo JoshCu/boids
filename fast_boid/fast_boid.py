@@ -3,6 +3,8 @@ from p5 import Vector
 import numpy as np
 import p5
 
+def calc_length(vector):
+    return math.sqrt(vector.x * vector.x + vector.y * vector.y)
 
 class Boid:
     def __init__(self, x, y, width, height, boid_size):
@@ -18,6 +20,8 @@ class Boid:
         self.max_speed = 5
         self.vision = 200
 
+
+
     def out_of_bounds(self):
         new_position = self.position + self.velocity
         if new_position[0] >= self.bound_x or new_position[0] <= 0:
@@ -32,13 +36,13 @@ class Boid:
         total = 0
         avg_vector = Vector(*np.zeros(2))
         for boid in boids:
-            if np.linalg.norm(boid.position - self.position) < self.vision:
+            if calc_length(boid.position - self.position) < self.vision:
                 avg_vector += boid.velocity
                 total += 1
         if total > 0:
             avg_vector /= total
             avg_vector = Vector(*avg_vector)
-            avg_vector = (avg_vector / np.linalg.norm(avg_vector)) * self.max_speed
+            avg_vector = (avg_vector / calc_length(avg_vector)) * self.max_speed
             steering = avg_vector - self.velocity
 
         return steering
@@ -48,18 +52,18 @@ class Boid:
         total = 0
         center_of_mass = Vector(*np.zeros(2))
         for boid in boids:
-            if np.linalg.norm(boid.position - self.position) < self.vision:
+            if calc_length(boid.position - self.position) < self.vision:
                 center_of_mass += boid.position
                 total += 1
         if total > 0:
             center_of_mass /= total
             center_of_mass = Vector(*center_of_mass)
             vec_to_com = center_of_mass - self.position
-            if np.linalg.norm(vec_to_com) > 0:
-                vec_to_com = (vec_to_com / np.linalg.norm(vec_to_com)) * self.max_speed
+            if calc_length(vec_to_com) > 0:
+                vec_to_com = (vec_to_com / calc_length(vec_to_com)) * self.max_speed
             steering = vec_to_com - self.velocity
-            if np.linalg.norm(steering)> self.max_force:
-                steering = (steering /np.linalg.norm(steering)) * self.max_force
+            if calc_length(steering)> self.max_force:
+                steering = (steering /calc_length(steering)) * self.max_force
 
         return steering
 
@@ -68,7 +72,7 @@ class Boid:
         total = 0
         avg_vector = Vector(*np.zeros(2))
         for boid in boids:
-            distance = np.linalg.norm(boid.position - self.position)
+            distance = calc_length(boid.position - self.position)
             if self.position != boid.position and distance < self.vision:
                 diff = self.position - boid.position
                 diff /= distance
@@ -77,11 +81,11 @@ class Boid:
         if total > 0:
             avg_vector /= total
             avg_vector = Vector(*avg_vector)
-            if np.linalg.norm(steering) > 0:
-                avg_vector = (avg_vector / np.linalg.norm(steering)) * self.max_speed
+            if calc_length(steering) > 0:
+                avg_vector = (avg_vector / calc_length(steering)) * self.max_speed
             steering = avg_vector - self.velocity
-            if np.linalg.norm(steering) > self.max_force:
-                steering = (steering /np.linalg.norm(steering)) * self.max_force
+            if calc_length(steering) > self.max_force:
+                steering = (steering /calc_length(steering)) * self.max_force
 
         return steering
         
