@@ -5,9 +5,10 @@ from boid import Boid
 width = 800
 height = 800
 bird_size = 10
+birds = 50
 flock = [
     Boid(np.random.randint(0, width),np.random.randint(0, height), width, height, bird_size)
-    for _ in range(50)
+    for _ in range(birds)
 ]
 
 
