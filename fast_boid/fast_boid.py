@@ -5,6 +5,8 @@ from random import random
 import numpy as np
 import p5
 from functools import cache
+from numba import jit
+
 
 class Vector2D(recordclass('Vector2D', ('x', 'y'))):
     __slots__ = ()
@@ -127,9 +129,9 @@ class Boid:
         cohesion = self.cohesion(boids)
         separation = self.separation(boids)
 
-        #self.acceleration += alignment
+        self.acceleration += alignment
         self.acceleration += cohesion
-        #self.acceleration += separation
+        self.acceleration += separation
 
     def update(self):
         self.position += self.velocity

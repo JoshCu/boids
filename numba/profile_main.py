@@ -1,13 +1,14 @@
 import numpy as np
-from fast_boid import Boid
+from boid import Boid
 
-width = 1400
-height = 1200
+width = 800
+height = 800
 bird_size = 10
 flock = [
     Boid(np.random.randint(0, width),np.random.randint(0, height), width, height, bird_size)
     for _ in range(50)
 ]
+
 
 def loop():
     for boid in flock:
@@ -16,6 +17,7 @@ def loop():
         boid.update()
         #boid.show_vision()
         #boid.show()
+
 
 counter = 0
 while counter < 2000:
